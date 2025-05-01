@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
+import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
-import 'package:path/path.dart' as p;
-
+ 
 class Services {
   // Sample data
   static final List<Map<String, dynamic>> data = [
@@ -40,20 +39,16 @@ class Services {
     }
   }
 
-  static Future<void> saveFileWithPicker({required Uint8List fileBytes, required String fileName}) async {
-    try {
-      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+  static Future<void> saveFile(Uint8List fileBytes, String fileName) async {
+  try {
+     await FlutterFileSaver().writeFileAsBytes(
+    fileName: fileName,
+    bytes: fileBytes,
+);
 
-      if (selectedDirectory != null) {
-        final filePath = p.join(selectedDirectory, fileName);
-        final file = File(filePath);
-        await file.writeAsBytes(fileBytes);
-        print('File saved to: $filePath');
-      } else {
-        print('User canceled directory selection');
-      }
-    } catch (e) {
-      print('Error saving file: $e');
-    }
+     
+  } catch (e) {
+    print("Error saving file: $e");
+  }
   }
 }

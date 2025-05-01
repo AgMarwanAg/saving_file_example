@@ -37,12 +37,17 @@ class _HomeWidgetState extends State<HomeWidget> {
             ElevatedButton(
               onPressed: () async {
                 file = await Services.createCSV();
+                log(file?.path.toString() ?? 'file is null');
               },
               child: Text('create file'),
             ),
             ElevatedButton(
               onPressed: () async {
-                Services.saveFileWithPicker(fileBytes: await file!.readAsBytes(), fileName: 'my_document.csv');
+                try {
+                  await Services.saveFile( await file!.readAsBytes(), 'my_document.csv');
+                } catch (e) {
+                  log(e.toString());
+                }
               },
               child: Text('save file'),
             ),
